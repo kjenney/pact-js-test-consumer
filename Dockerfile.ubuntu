@@ -1,0 +1,31 @@
+FROM node:10.15.3
+
+ARG NODE_ENV
+
+RUN apt update
+
+# Install dependencies
+RUN apt install -y make \
+  curl \
+  groff \
+  less \
+  bash \
+  python \
+  ruby
+
+# Update npm
+RUN npm install -g npm
+
+WORKDIR /usr/src/app
+
+# Copy Package.json and lock
+COPY package* ./
+
+# Install NodeJS Dependencies
+RUN npm install
+
+# Copy code
+COPY . .
+
+# Run tests
+RUN npm run test
